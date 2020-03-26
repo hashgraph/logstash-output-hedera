@@ -5,7 +5,7 @@ import co.elastic.logstash.api.Event;
 import org.junit.Assert;
 import org.junit.Test;
 import org.logstash.plugins.ConfigurationImpl;
-import llc.launchbadge.OutputPluginHcs;
+import llc.launchbadge.LogstashOutputHcs;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -13,16 +13,16 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class OutputPluginHcsTest {
+public class LogstashOutputHcsTest {
 
     @Test
-    public void testOutputPluginHcs() {
+    public void testLogstashOutputHcs() {
         String prefix = "Prefix";
         Map<String, Object> configValues = new HashMap<>();
-        configValues.put(OutputPluginHcs.PREFIX_CONFIG.name(), prefix);
+        configValues.put(LogstashOutputHcs.PREFIX_CONFIG.name(), prefix);
         Configuration config = new ConfigurationImpl(configValues);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        OutputPluginHcs output = new OutputPluginHcs("test-id", config, null, baos);
+        LogstashOutputHcs output = new LogstashOutputHcs("test-id", config, null, baos);
 
         String sourceField = "message";
         int eventCount = 5;

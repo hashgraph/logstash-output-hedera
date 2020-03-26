@@ -16,8 +16,8 @@ pluginInfo.authors         = ['Launchbadge']
 pluginInfo.email           = ['help@launchbadge.com']
 pluginInfo.homepage        = ""
 pluginInfo.pluginType      = "output"
-pluginInfo.pluginClass     = "OutputPluginHcs"
-pluginInfo.pluginName      = "output_plugin_hcs" // must match the @LogstashPlugin annotation in the main plugin class
+pluginInfo.pluginClass     = "LogstashOutputHcs"
+pluginInfo.pluginName      = "logstash_output_hcs" // must match the @LogstashPlugin annotation in the main plugin class
 // ===========================================================================
 
 sourceCompatibility = 1.8
