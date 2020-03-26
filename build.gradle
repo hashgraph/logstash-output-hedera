@@ -42,6 +42,7 @@ task wrapper(type: Wrapper) {
     gradleVersion = '4.0'
 }
 
+// Support for UberJARs
 apply plugin: 'com.github.johnrengelman.shadow'
 
 shadowJar {
