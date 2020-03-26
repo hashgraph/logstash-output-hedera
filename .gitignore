@@ -18,6 +18,3 @@ out/
 Gemfile*
 settings.gradle
 gradle.properties
-gradlew
-gradlew.bat
-gradle/
