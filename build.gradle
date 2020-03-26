@@ -28,7 +28,6 @@ buildscript {
         mavenCentral()
         jcenter()
     }
-
     dependencies {
         classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
     }
@@ -52,6 +51,8 @@ shadowJar {
 dependencies {
     compile 'org.apache.logging.log4j:log4j-api:2.9.1'
     compile fileTree(dir: LOGSTASH_CORE_PATH, include: "**/logstash-core-?.?.?.jar")
+    compile 'com.hedera.hashgraph:sdk:1.1.4'
+    compile 'io.grpc:grpc-netty-shaded:1.24.0'
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.jruby:jruby-complete:9.1.13.0'
