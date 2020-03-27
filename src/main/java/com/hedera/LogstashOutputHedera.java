@@ -8,6 +8,7 @@ import co.elastic.logstash.api.Output;
 import co.elastic.logstash.api.PluginConfigSpec;
 
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -42,6 +43,7 @@ public class LogstashOutputHedera implements Output {
     private final String id;
     private final CountDownLatch done = new CountDownLatch(1);
     private volatile boolean stopped = false;
+    private final PrintStream printStream;
 
     // HCS
     private final AccountId operatorId;
@@ -111,6 +113,7 @@ public class LogstashOutputHedera implements Output {
         this.hapiClient = createClient();
         this.mirrorNodeAddress = config.get(MIRROR_NODE_ADDRESS_CONFIG);
         this.mirrorNodeClient = createMirrorNodeClient();
+        this.printStream = new PrintStream(targetStream);
         checkTopic();
     }
 
@@ -135,7 +138,7 @@ public class LogstashOutputHedera implements Output {
 
                 consensusTransaction.execute(this.hapiClient).getReceipt(this.hapiClient);
             } catch (HederaStatusException e) {
-                e.printStackTrace();
+                this.printStream.print(e.getStackTrace());
             }         
         }
     }
