@@ -15,7 +15,9 @@ This plugin is an _output_ plugin that sends messages to a HCS (Hedera Consensus
 
 When cloning this repository, use `--recurse-submodules` to get the required (for development) logstash source
 
-You may have problems with getting vs code to correctly resolve imports. I do not know how to fix this, only that it does eventually go away. 
+You may have problems with getting vs code to correctly resolve imports. I do not know how to fix this, only that it does eventually go away.
+
+You will need a .env file containing information for connection to the Hedera Consensus Service, including `OPERATOR_ID, OPERATOR_KEY, TOPIC_ID, NETWORK_NAME` at minimum
 
 ```
 git clone --recurse-submodules <this>
