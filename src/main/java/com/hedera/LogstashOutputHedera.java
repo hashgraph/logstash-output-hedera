@@ -107,7 +107,7 @@ public class LogstashOutputHedera implements Output {
         this.operatorKey = Ed25519PrivateKey.fromString(config.get(OPERATOR_KEY_CONFIG));
         this.topicId = ConsensusTopicId.fromString(config.get(TOPIC_ID_CONFIG));
         this.networkName = config.get(NETWORK_NAME_CONFIG);
-        this.submitKey = Ed25519PrivateKey.fromString(config.get(SUBMIT_KEY_CONFIG));
+        this.submitKey = config.get(SUBMIT_KEY_CONFIG) == null ? null : Ed25519PrivateKey.fromString(config.get(SUBMIT_KEY_CONFIG));
         this.hapiClient = createClient();
         this.mirrorNodeAddress = config.get(MIRROR_NODE_ADDRESS_CONFIG);
         this.mirrorNodeClient = createMirrorNodeClient();

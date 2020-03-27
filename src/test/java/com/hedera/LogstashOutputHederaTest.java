@@ -22,8 +22,7 @@ public class LogstashOutputHederaTest {
         Dotenv dotenv = Dotenv.configure().ignoreIfMalformed().ignoreIfMissing().load();
         Map<String, Object> configValues = new HashMap<>();
         for (DotenvEntry e : dotenv.entries()) {
-            System.out.println(e.getKey() + ": " + e.getValue());
-            configValues.put(e.getKey(), e.getValue());
+            configValues.put(e.getKey().toLowerCase(), e.getValue());
         }
 
         Configuration config = new ConfigurationImpl(configValues);
