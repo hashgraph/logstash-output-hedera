@@ -1,4 +1,4 @@
-package llc.launchbadge;
+package com.hedera;
 
 import co.elastic.logstash.api.Configuration;
 import co.elastic.logstash.api.Context;
@@ -28,8 +28,8 @@ import com.hedera.hashgraph.sdk.mirror.MirrorClient;
 import com.hedera.hashgraph.sdk.mirror.MirrorConsensusTopicQuery;
 
 // Class name must match plugin name (also in build.gradle)
-@LogstashPlugin(name = "logstash_output_hcs")
-public class LogstashOutputHcs implements Output {
+@LogstashPlugin(name = "logstash_output_hedera")
+public class LogstashOutputHedera implements Output {
     public static final PluginConfigSpec<String> OPERATOR_ID_CONFIG = PluginConfigSpec.stringSetting("operator_id");
     public static final PluginConfigSpec<String> OPERATOR_KEY_CONFIG = PluginConfigSpec.stringSetting("operator_key");
     public static final PluginConfigSpec<String> TOPIC_ID_CONFIG = PluginConfigSpec.stringSetting("topic_id");
@@ -54,7 +54,7 @@ public class LogstashOutputHcs implements Output {
     private final String mirrorNodeAddress;
 
     // All plugins must provide a constructor that accepts id, Configuration, and Context
-    public LogstashOutputHcs(final String id, final Configuration configuration, final Context context) {
+    public LogstashOutputHedera(final String id, final Configuration configuration, final Context context) {
         this(id, configuration, context, System.out);
     }
 
@@ -100,7 +100,7 @@ public class LogstashOutputHcs implements Output {
             .subscribe(this.mirrorNodeClient, null, null);
     }
 
-    LogstashOutputHcs(final String id, final Configuration config, final Context context, OutputStream targetStream) {
+    LogstashOutputHedera(final String id, final Configuration config, final Context context, OutputStream targetStream) {
         // Validate configuration settings here
         this.id = id;
         this.operatorId = AccountId.fromString(config.get(OPERATOR_ID_CONFIG));

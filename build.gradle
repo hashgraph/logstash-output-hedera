@@ -7,17 +7,17 @@ apply from: LOGSTASH_CORE_PATH + "/../rubyUtils.gradle"
 // ===========================================================================
 // plugin info
 // ===========================================================================
-group                      'org.logstashplugins' // must match the package of the main plugin class
+group                      'com.hedera' // must match the package of the main plugin class
 version                    "${file("VERSION").text.trim()}" // read from required VERSION file
-description                = "Logstash Plugin HCS: Output to Hedera Consensus Service"
+description                = "Logstash Output Hedera: Output to Hedera Consensus Service"
 pluginInfo.licenses        = ['Apache-2.0'] // list of SPDX license IDs
 pluginInfo.longDescription = "This gem is a Logstash plugin required to be installed on top of the Logstash core pipeline using \$LS_HOME/bin/logstash-plugin install gemname. This gem is not a stand-alone program"
-pluginInfo.authors         = ['Launchbadge']
-pluginInfo.email           = ['help@launchbadge.com']
-pluginInfo.homepage        = ""
+pluginInfo.authors         = ['Hedera']
+pluginInfo.email           = ['help@hedera.com']
+pluginInfo.homepage        = "https://github.com/hashgraph/logstash-output-hedera"
 pluginInfo.pluginType      = "output"
-pluginInfo.pluginClass     = "LogstashOutputHcs"
-pluginInfo.pluginName      = "logstash_output_hcs" // must match the @LogstashPlugin annotation in the main plugin class
+pluginInfo.pluginClass     = "LogstashOutputHedera"
+pluginInfo.pluginName      = "logstash_output_hedera" // must match the @LogstashPlugin annotation in the main plugin class
 // ===========================================================================
 
 sourceCompatibility = 1.8

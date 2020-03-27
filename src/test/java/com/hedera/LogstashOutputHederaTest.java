@@ -1,4 +1,4 @@
-package llc.launchbadge;
+package com.hedera;
 
 import co.elastic.logstash.api.Configuration;
 import co.elastic.logstash.api.Event;
@@ -8,14 +8,14 @@ import io.github.cdimascio.dotenv.DotenvEntry;
 import org.junit.Assert;
 import org.junit.Test;
 import org.logstash.plugins.ConfigurationImpl;
-import llc.launchbadge.LogstashOutputHcs;
+import com.hedera.LogstashOutputHedera;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LogstashOutputHcsTest {
+public class LogstashOutputHederaTest {
 
     @Test
     public void testLogstashOutputHcs() {
@@ -27,7 +27,7 @@ public class LogstashOutputHcsTest {
         }
 
         Configuration config = new ConfigurationImpl(configValues);
-        LogstashOutputHcs output = new LogstashOutputHcs("test-id", config, null);
+        LogstashOutputHedera output = new LogstashOutputHedera("test-id", config, null);
 
         Collection<Event> events = new ArrayList<>();
         // Add events here
