@@ -35,7 +35,7 @@ public class LogstashOutputHcs implements Output {
     public static final PluginConfigSpec<String> TOPIC_ID_CONFIG = PluginConfigSpec.stringSetting("topic_id");
     public static final PluginConfigSpec<String> NETWORK_NAME_CONFIG = PluginConfigSpec.stringSetting("network_name");
     public static final PluginConfigSpec<String> MIRROR_NODE_ADDRESS_CONFIG = PluginConfigSpec
-            .stringSetting("mirror_node_address");
+            .stringSetting("mirror_node_address", null);
     public static final PluginConfigSpec<String> SUBMIT_KEY_CONFIG = PluginConfigSpec.stringSetting("submit_key", null);
 
     // Logstash
@@ -61,9 +61,9 @@ public class LogstashOutputHcs implements Output {
     private final Client createClient() {
         Client client = null;
         
-        if (this.networkName.contains("test") || this.networkName.contains("testnet")) {
+        if (this.isTestnet()) {
             client = Client.forTestnet();
-        } else if (this.networkName.contains("main") || this.networkName.contains("mainnet")) {
+        } else if (!this.isTestnet()) {
             client = Client.forMainnet();
         }
 
@@ -76,8 +76,21 @@ public class LogstashOutputHcs implements Output {
 
     private final MirrorClient createMirrorNodeClient() {
         MirrorClient client = null;
-        client = new MirrorClient(this.mirrorNodeAddress);
+        if (this.mirrorNodeAddress == null) {
+            if (isTestnet()) {
+                client = new MirrorClient("api.testnet.kabuto.sh:50211");
+            } else if (!isTestnet()) {
+                client = new MirrorClient("api.kabuto.sh:50211");
+            }
+        } else {
+            client = new MirrorClient(this.mirrorNodeAddress);
+        }
+
         return client;
+    }
+
+    private final boolean isTestnet() {
+        return this.networkName.contains("test") || this.networkName.contains("testnet");
     }
 
     private final void checkTopic() {
