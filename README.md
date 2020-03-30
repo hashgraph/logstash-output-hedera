@@ -25,7 +25,7 @@ The available configuration options are:
 - NETWORK_NAME: (String) Either "mainnet" or "testnet" (no custom network support)
 - MIRROR_NODE_ADDRESS: (String) Address of Hedera mirror node as URI
 
-If you leave MIRROR_NODE_ADDRESS unconfigured, then [kabuto.sh](https://docs.kabuto.sh)'s mirror's will be used.
+If you leave MIRROR_NODE_ADDRESS unconfigured, then [kabuto.sh](https://docs.kabuto.sh)'s mirrors will be used.
 
 ### Development
 
