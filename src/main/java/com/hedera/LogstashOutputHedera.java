@@ -107,6 +107,7 @@ public class LogstashOutputHedera implements Output {
             OutputStream targetStream) {
         // Validate configuration settings here
         this.id = id;
+        this.printStream = new PrintStream(targetStream);
         this.operatorId = AccountId.fromString(config.get(OPERATOR_ID_CONFIG));
         this.operatorKey = Ed25519PrivateKey.fromString(config.get(OPERATOR_KEY_CONFIG));
         this.topicId = ConsensusTopicId.fromString(config.get(TOPIC_ID_CONFIG));
@@ -116,7 +117,6 @@ public class LogstashOutputHedera implements Output {
         this.hapiClient = createClient();
         this.mirrorNodeAddress = config.get(MIRROR_NODE_ADDRESS_CONFIG);
         this.mirrorNodeClient = createMirrorNodeClient();
-        this.printStream = new PrintStream(targetStream);
         checkTopic();
     }
 
@@ -172,6 +172,7 @@ public class LogstashOutputHedera implements Output {
         configs.add(OPERATOR_KEY_CONFIG);
         configs.add(SUBMIT_KEY_CONFIG);
         configs.add(NETWORK_NAME_CONFIG);
+        configs.add(MIRROR_NODE_ADDRESS_CONFIG);
         return configs;
     }
 
