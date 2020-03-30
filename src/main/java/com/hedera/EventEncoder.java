@@ -13,6 +13,7 @@ public class EventEncoder {
     public static final Event decode(final String encodedEvent) throws IOException {
         Event event = new org.logstash.Event();
         event.setField("message", encodedEvent);
+        System.err.println(event);
         return event;
     }
 }
