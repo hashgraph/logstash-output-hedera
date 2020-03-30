@@ -35,7 +35,7 @@ public class LogstashOutputHederaTest {
         /*
          * Configuration for Hedera connection required, including:
          * OPERATOR_ID, OPERATOR_KEY, TOPIC_ID, NETWORK_NAME
-         * You may specify MIRROR_NODE_ADDRESS, defaults to kabuto.sh
+         * You may specify MIRROR_NODE_ADDRESS, defaults to kabuto.sh if null
          */
         for (DotenvEntry e : dotenv.entries()) {
             configValues.put(e.getKey().toLowerCase(), e.getValue());
@@ -63,22 +63,28 @@ public class LogstashOutputHederaTest {
 
         // Set up listening on topic id
         ConsensusTopicId topicId = ConsensusTopicId.fromString((String) configValues.get("topic_id"));
-        Instant startTime = Instant.now();
-        MirrorClient mirrorClient = new MirrorClient("api.testnet.kabuto.sh:50211");
+        MirrorClient mirrorClient = new MirrorClient((String) configValues.get("mirror_node_address"));
+        Instant startTime = Instant.now().plusMillis(100);
+        Instant endTime = startTime.plusSeconds(10);
 
         // For every message received, if it contains the UUID from above, add to recieved
         new MirrorConsensusTopicQuery()
             .setTopicId(topicId)
             .setStartTime(startTime)
+            .setEndTime(endTime)
             .subscribe(mirrorClient, message -> {
                 try {
-                    Event event = EventEncoder.decode(new String(message.message));
-                    String msg = (String) event.getField("message");
+                    String m = new String(message.message);
+                    System.err.println(m);
+                    Event e = EventEncoder.decode(m);
+                    System.err.println(e);
 
-                    if (msg.contains(uuid.toString())) {
-                        receivedMessages.add(msg);
+                    if (m.contains(uuid.toString())) {
+                        receivedMessages.add(m);
                     }
                 } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
             }, Throwable::printStackTrace);
@@ -93,6 +99,7 @@ public class LogstashOutputHederaTest {
             .until(receivedMessages::size, Matchers.equalTo(10));
         
         // Check that sent and received messages are the same
+        Assert.assertEquals(eventCount, receivedMessages.size());
         Assert.assertArrayEquals(sentMessages.toArray(), receivedMessages.toArray());
     }
 }
