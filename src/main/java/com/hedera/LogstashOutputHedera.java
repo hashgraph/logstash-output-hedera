@@ -7,6 +7,7 @@ import co.elastic.logstash.api.LogstashPlugin;
 import co.elastic.logstash.api.Output;
 import co.elastic.logstash.api.PluginConfigSpec;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.time.Instant;
@@ -16,8 +17,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.hedera.hashgraph.sdk.Client;
 import com.hedera.hashgraph.sdk.HederaStatusException;
 import com.hedera.hashgraph.sdk.Transaction;
@@ -55,14 +54,15 @@ public class LogstashOutputHedera implements Output {
     private final MirrorClient mirrorNodeClient;
     private final String mirrorNodeAddress;
 
-    // All plugins must provide a constructor that accepts id, Configuration, and Context
+    // All plugins must provide a constructor that accepts id, Configuration, and
+    // Context
     public LogstashOutputHedera(final String id, final Configuration configuration, final Context context) {
         this(id, configuration, context, System.out);
     }
 
     private final Client createClient() {
         Client client = null;
-        
+
         if (this.isTestnet()) {
             client = Client.forTestnet();
         } else if (!this.isTestnet()) {
@@ -96,20 +96,20 @@ public class LogstashOutputHedera implements Output {
     }
 
     private final void checkTopic() {
-        new MirrorConsensusTopicQuery()
-            .setTopicId(this.topicId)
-            .setStartTime(Instant.ofEpochSecond(0))
-            .subscribe(this.mirrorNodeClient, null, null);
+        new MirrorConsensusTopicQuery().setTopicId(this.topicId).setStartTime(Instant.ofEpochSecond(0))
+                .subscribe(this.mirrorNodeClient, null, null);
     }
 
-    LogstashOutputHedera(final String id, final Configuration config, final Context context, OutputStream targetStream) {
+    LogstashOutputHedera(final String id, final Configuration config, final Context context,
+            OutputStream targetStream) {
         // Validate configuration settings here
         this.id = id;
         this.operatorId = AccountId.fromString(config.get(OPERATOR_ID_CONFIG));
         this.operatorKey = Ed25519PrivateKey.fromString(config.get(OPERATOR_KEY_CONFIG));
         this.topicId = ConsensusTopicId.fromString(config.get(TOPIC_ID_CONFIG));
         this.networkName = config.get(NETWORK_NAME_CONFIG);
-        this.submitKey = config.get(SUBMIT_KEY_CONFIG) == null ? null : Ed25519PrivateKey.fromString(config.get(SUBMIT_KEY_CONFIG));
+        this.submitKey = config.get(SUBMIT_KEY_CONFIG) == null ? null
+                : Ed25519PrivateKey.fromString(config.get(SUBMIT_KEY_CONFIG));
         this.hapiClient = createClient();
         this.mirrorNodeAddress = config.get(MIRROR_NODE_ADDRESS_CONFIG);
         this.mirrorNodeClient = createMirrorNodeClient();
@@ -120,11 +120,17 @@ public class LogstashOutputHedera implements Output {
     @Override
     public void output(final Collection<Event> events) {
         Iterator<Event> z = events.iterator();
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        
+
         while (z.hasNext() && !this.stopped) {
             Event event = z.next();
-            String encodedEvent = gson.toJson(event);
+            String encodedEvent = null;
+            
+            try {
+                encodedEvent = EventEncoder.encode(event);
+            } catch (IOException e) {
+                e.printStackTrace(this.printStream);
+                continue;
+            }
             
             try {
                 Transaction consensusTransaction = new ConsensusMessageSubmitTransaction()
