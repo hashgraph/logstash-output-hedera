@@ -96,8 +96,11 @@ public class LogstashOutputHedera implements Output {
     }
 
     private final void checkTopic() {
-        new MirrorConsensusTopicQuery().setTopicId(this.topicId).setStartTime(Instant.ofEpochSecond(0))
-                .subscribe(this.mirrorNodeClient, null, null);
+        new MirrorConsensusTopicQuery()
+            .setTopicId(this.topicId)
+            .setStartTime(Instant.ofEpochSecond(0))
+            .setLimit(1)  // Try to get the first message from topic to make sure it exists
+            .subscribe(this.mirrorNodeClient, null, Throwable::printStackTrace);
     }
 
     LogstashOutputHedera(final String id, final Configuration config, final Context context,
@@ -123,7 +126,7 @@ public class LogstashOutputHedera implements Output {
 
         while (z.hasNext() && !this.stopped) {
             Event event = z.next();
-            String encodedEvent = null;
+            byte[] encodedEvent = null;
             
             try {
                 encodedEvent = EventEncoder.encode(event);

@@ -74,11 +74,8 @@ public class LogstashOutputHederaTest {
             .setEndTime(endTime)
             .subscribe(mirrorClient, message -> {
                 try {
-                    String m = new String(message.message);
-                    System.err.println(m);
-                    Event e = EventEncoder.decode(m);
-                    System.err.println(e);
-
+                    Event e = EventEncoder.decode(message.message);
+                    String m = (String) e.getField("message");
                     if (m.contains(uuid.toString())) {
                         receivedMessages.add(m);
                     }

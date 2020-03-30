@@ -5,13 +5,11 @@ import java.io.IOException;
 import co.elastic.logstash.api.Event;
 
 public class EventEncoder {
-    public static final String encode(final Event event) throws IOException {
-        return event.toString();
+    public static final byte[] encode(final Event event) throws IOException {
+        return ((org.logstash.Event) event).serialize();
     }
 
-    public static final Event decode(final String encodedEvent) throws IOException {
-        Event event = new org.logstash.Event();
-        event.setField("message", encodedEvent);
-        return event;
+    public static final Event decode(final byte[] encodedEvent) throws IOException {
+        return org.logstash.Event.deserialize(encodedEvent);
     }
 }
