@@ -10,7 +10,6 @@ import co.elastic.logstash.api.PluginConfigSpec;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -24,8 +23,6 @@ import com.hedera.hashgraph.sdk.account.AccountId;
 import com.hedera.hashgraph.sdk.consensus.ConsensusMessageSubmitTransaction;
 import com.hedera.hashgraph.sdk.consensus.ConsensusTopicId;
 import com.hedera.hashgraph.sdk.crypto.ed25519.Ed25519PrivateKey;
-import com.hedera.hashgraph.sdk.mirror.MirrorClient;
-import com.hedera.hashgraph.sdk.mirror.MirrorConsensusTopicQuery;
 
 // Class name must match plugin name (also in build.gradle)
 @LogstashPlugin(name = "logstash_output_hedera")
@@ -34,8 +31,6 @@ public class LogstashOutputHedera implements Output {
     public static final PluginConfigSpec<String> OPERATOR_KEY_CONFIG = PluginConfigSpec.stringSetting("operator_key");
     public static final PluginConfigSpec<String> TOPIC_ID_CONFIG = PluginConfigSpec.stringSetting("topic_id");
     public static final PluginConfigSpec<String> NETWORK_NAME_CONFIG = PluginConfigSpec.stringSetting("network_name");
-    public static final PluginConfigSpec<String> MIRROR_NODE_ADDRESS_CONFIG = PluginConfigSpec
-            .stringSetting("mirror_node_address", null);
     public static final PluginConfigSpec<String> SUBMIT_KEY_CONFIG = PluginConfigSpec.stringSetting("submit_key", null);
 
     // Logstash
@@ -51,8 +46,6 @@ public class LogstashOutputHedera implements Output {
     private final String networkName;
     private final Ed25519PrivateKey submitKey;
     private final Client hapiClient;
-    private final MirrorClient mirrorNodeClient;
-    private final String mirrorNodeAddress;
 
     // All plugins must provide a constructor that accepts id, Configuration, and
     // Context
@@ -76,31 +69,8 @@ public class LogstashOutputHedera implements Output {
         return client;
     }
 
-    private final MirrorClient createMirrorNodeClient() {
-        MirrorClient client = null;
-        if (this.mirrorNodeAddress == null) {
-            if (isTestnet()) {
-                client = new MirrorClient("api.testnet.kabuto.sh:50211");
-            } else if (!isTestnet()) {
-                client = new MirrorClient("api.kabuto.sh:50211");
-            }
-        } else {
-            client = new MirrorClient(this.mirrorNodeAddress);
-        }
-
-        return client;
-    }
-
     private final boolean isTestnet() {
         return this.networkName.contains("test") || this.networkName.contains("testnet");
-    }
-
-    private final void checkTopic() {
-        new MirrorConsensusTopicQuery()
-            .setTopicId(this.topicId)
-            .setStartTime(Instant.ofEpochSecond(0))
-            .setLimit(1)  // Try to get the first message from topic to make sure it exists
-            .subscribe(this.mirrorNodeClient, null, Throwable::printStackTrace);
     }
 
     LogstashOutputHedera(final String id, final Configuration config, final Context context,
@@ -115,9 +85,6 @@ public class LogstashOutputHedera implements Output {
         this.submitKey = config.get(SUBMIT_KEY_CONFIG) == null ? null
                 : Ed25519PrivateKey.fromString(config.get(SUBMIT_KEY_CONFIG));
         this.hapiClient = createClient();
-        this.mirrorNodeAddress = config.get(MIRROR_NODE_ADDRESS_CONFIG);
-        this.mirrorNodeClient = createMirrorNodeClient();
-        checkTopic();
     }
 
     @Override
@@ -172,7 +139,6 @@ public class LogstashOutputHedera implements Output {
         configs.add(OPERATOR_KEY_CONFIG);
         configs.add(SUBMIT_KEY_CONFIG);
         configs.add(NETWORK_NAME_CONFIG);
-        configs.add(MIRROR_NODE_ADDRESS_CONFIG);
         return configs;
     }
 

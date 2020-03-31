@@ -65,7 +65,7 @@ public class LogstashOutputHederaTest {
         ConsensusTopicId topicId = ConsensusTopicId.fromString((String) configValues.get("topic_id"));
         MirrorClient mirrorClient = new MirrorClient((String) configValues.get("mirror_node_address"));
         Instant startTime = Instant.now().plusMillis(100);
-        Instant endTime = startTime.plusSeconds(10);
+        Instant endTime = startTime.plusSeconds(eventCount);
 
         // For every message received, if it contains the UUID from above, add to recieved
         new MirrorConsensusTopicQuery()
@@ -89,11 +89,11 @@ public class LogstashOutputHederaTest {
         // Actually output events
         logstashOutputHedera.output(events);
 
-        // Wait between 1:10 seconds, or until eventCount messages received
+        // Wait between 1:eventCount seconds, or until eventCount messages received
         Awaitility.await()
             .atLeast(1, TimeUnit.SECONDS)
-            .and().atMost(10, TimeUnit.SECONDS)
-            .until(receivedMessages::size, Matchers.equalTo(10));
+            .and().atMost(eventCount, TimeUnit.SECONDS)
+            .until(receivedMessages::size, Matchers.equalTo(eventCount));
         
         // Check that sent and received messages are the same
         Assert.assertEquals(eventCount, receivedMessages.size());
