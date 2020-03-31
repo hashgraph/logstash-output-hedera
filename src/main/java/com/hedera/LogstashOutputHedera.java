@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import com.hedera.hashgraph.sdk.Client;
-import com.hedera.hashgraph.sdk.HederaStatusException;
 import com.hedera.hashgraph.sdk.Transaction;
 import com.hedera.hashgraph.sdk.account.AccountId;
 import com.hedera.hashgraph.sdk.consensus.ConsensusMessageSubmitTransaction;

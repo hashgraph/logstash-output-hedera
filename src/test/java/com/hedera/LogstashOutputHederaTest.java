@@ -47,7 +47,7 @@ public class LogstashOutputHederaTest {
         LogstashOutputHedera logstashOutputHedera = new LogstashOutputHedera("test-id", config, null, System.err);
 
         // Setup test
-        int eventCount = 10;
+        int eventCount = 100;
         UUID uuid = UUID.randomUUID();
         Collection<Event> events = new ArrayList<>();
         List<String> sentMessages = new ArrayList<String>();
