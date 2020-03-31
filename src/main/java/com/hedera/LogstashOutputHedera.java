@@ -112,7 +112,7 @@ public class LogstashOutputHedera implements Output {
                     consensusTransaction.sign(this.submitKey);
                 }
 
-                consensusTransaction.execute(this.hapiClient).getReceipt(this.hapiClient);
+                consensusTransaction.execute(this.hapiClient);
             } catch (HederaStatusException e) {
                 this.printStream.print(e.getStackTrace());
             }         
