@@ -17,6 +17,9 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import com.hedera.hashgraph.sdk.Client;
+import com.hedera.hashgraph.sdk.HederaNetworkException;
+import com.hedera.hashgraph.sdk.HederaStatusException;
+import com.hedera.hashgraph.sdk.HederaThrowable;
 import com.hedera.hashgraph.sdk.Transaction;
 import com.hedera.hashgraph.sdk.account.AccountId;
 import com.hedera.hashgraph.sdk.consensus.ConsensusMessageSubmitTransaction;
@@ -86,6 +89,18 @@ public class LogstashOutputHedera implements Output {
         this.hapiClient = createClient();
     }
 
+    private void handleHederaMessage(Object response) {
+        // Do nothing
+    }
+
+    private void handleHederaError(HederaThrowable throwable) throws HederaStatusException, HederaNetworkException {
+        if (throwable instanceof HederaStatusException) {
+            throw (HederaStatusException) throwable;
+        } else if (throwable instanceof HederaNetworkException) {
+            throw (HederaNetworkException) throwable;
+        }
+    }
+
     @Override
     public void output(final Collection<Event> events) {
         Iterator<Event> z = events.iterator();
@@ -110,7 +125,13 @@ public class LogstashOutputHedera implements Output {
                 consensusTransaction.sign(this.submitKey);
             }
 
-            consensusTransaction.executeAsync(this.hapiClient, null, this.printStream::print);
+            consensusTransaction.executeAsync(this.hapiClient, this::handleHederaMessage, error -> {
+                try {
+                    handleHederaError(error);
+                } catch (HederaNetworkException | HederaStatusException e) {
+                    e.printStackTrace(this.printStream);
+                }
+            });
         }
     }
 
