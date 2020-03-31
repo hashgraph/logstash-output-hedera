@@ -102,20 +102,16 @@ public class LogstashOutputHedera implements Output {
                 continue;
             }
             
-            try {
-                Transaction consensusTransaction = new ConsensusMessageSubmitTransaction()
-                    .setTopicId(this.topicId)
-                    .setMessage(encodedEvent)
-                    .build(this.hapiClient);
-            
-                if (this.submitKey != null) {
-                    consensusTransaction.sign(this.submitKey);
-                }
+            Transaction consensusTransaction = new ConsensusMessageSubmitTransaction()
+                .setTopicId(this.topicId)
+                .setMessage(encodedEvent)
+                .build(this.hapiClient);
+        
+            if (this.submitKey != null) {
+                consensusTransaction.sign(this.submitKey);
+            }
 
-                consensusTransaction.execute(this.hapiClient);
-            } catch (HederaStatusException e) {
-                this.printStream.print(e.getStackTrace());
-            }         
+            consensusTransaction.executeAsync(this.hapiClient, null, this.printStream::print);
         }
     }
 

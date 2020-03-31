@@ -18,6 +18,7 @@ import org.hamcrest.Matchers;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -97,6 +98,10 @@ public class LogstashOutputHederaTest {
         
         // Check that sent and received messages are the same
         Assert.assertEquals(eventCount, receivedMessages.size());
-        Assert.assertArrayEquals(sentMessages.toArray(), receivedMessages.toArray());
+        Object[] sent = sentMessages.toArray();
+        Object[] received = receivedMessages.toArray();
+        Arrays.sort(sent);
+        Arrays.sort(received);
+        Assert.assertArrayEquals(sent, received);
     }
 }
