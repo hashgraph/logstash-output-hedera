@@ -55,7 +55,7 @@ public class LogstashOutputHederaTest {
         // Create Events with new UUID in body
         for (int i = 0; i < eventCount; i++) {
             Event event = new org.logstash.Event();
-            String msg = "test " + uuid.toString() + " message " + i;
+            String msg = "test " + uuid.toString() + " message " + (i + 1);
             sentMessages.add(msg);
             event.setField("message", msg);
             events.add(event);
