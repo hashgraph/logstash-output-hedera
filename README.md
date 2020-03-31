@@ -15,17 +15,16 @@ This plugin is an _output_ plugin that sends messages to a HCS (Hedera Consensus
 
 ### Configuration
 
-You will need a .env file (or set environment variables) containing information for constructing a hedera client and for connecting to the hedera network. 
+You will need a .env file (or set environment variables) containing information for constructing a hedera client and for connecting to the hedera network.
+These configuration options are setup using the logstash Config objects, or using dotenv in test. 
 The available configuration options are:
 
 - TOPIC_ID: (String) the target HCS topic, in format of "shard.realm.num"
 - OPERATOR_ID: (String) the operator account id in the format "shard.realm.num"
 - OPERATOR_KEY: (String) Ed25519 private key associated with the operator account
-- SUBMIT_KEY: (String) Ed25519 private key used to create the topic (optional), which is required to submit
+- SUBMIT_KEY: (String) Ed25519 private key used to create the topic, which is required to submit [Optional]
 - NETWORK_NAME: (String) Either "mainnet" or "testnet" (no custom network support)
-- MIRROR_NODE_ADDRESS: (String) Address of Hedera mirror node as URI
-
-If you leave MIRROR_NODE_ADDRESS unconfigured, then [kabuto.sh](https://docs.kabuto.sh)'s mirrors will be used.
+- MIRROR_NODE_ADDRESS: (String) Address of Hedera mirror node as URI [Test Only]
 
 ### Development
 
