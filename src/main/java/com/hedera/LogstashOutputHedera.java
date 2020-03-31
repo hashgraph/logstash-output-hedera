@@ -89,9 +89,7 @@ public class LogstashOutputHedera implements Output {
         this.hapiClient = createClient();
     }
 
-    private void handleHederaMessage(Object response) {
-        // Do nothing
-    }
+private void handleHederaMessage(Object response) {/* Do nothing */}
 
     private void handleHederaError(HederaThrowable throwable) throws HederaStatusException, HederaNetworkException {
         if (throwable instanceof HederaStatusException) {
