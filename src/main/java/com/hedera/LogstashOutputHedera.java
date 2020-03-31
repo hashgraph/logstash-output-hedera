@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeoutException;
 
 import com.hedera.hashgraph.sdk.Client;
 import com.hedera.hashgraph.sdk.HederaNetworkException;
@@ -89,7 +90,8 @@ public class LogstashOutputHedera implements Output {
         this.hapiClient = createClient();
     }
 
-private void handleHederaMessage(Object response) {/* Do nothing */}
+    private void handleHederaMessage(Object response) {
+        /* Do nothing */}
 
     private void handleHederaError(HederaThrowable throwable) throws HederaStatusException, HederaNetworkException {
         if (throwable instanceof HederaStatusException) {
@@ -106,19 +108,17 @@ private void handleHederaMessage(Object response) {/* Do nothing */}
         while (z.hasNext() && !this.stopped) {
             Event event = z.next();
             byte[] encodedEvent = null;
-            
+
             try {
                 encodedEvent = EventEncoder.encode(event);
             } catch (IOException e) {
                 e.printStackTrace(this.printStream);
                 continue;
             }
-            
-            Transaction consensusTransaction = new ConsensusMessageSubmitTransaction()
-                .setTopicId(this.topicId)
-                .setMessage(encodedEvent)
-                .build(this.hapiClient);
-        
+
+            Transaction consensusTransaction = new ConsensusMessageSubmitTransaction().setTopicId(this.topicId)
+                    .setMessage(encodedEvent).build(this.hapiClient);
+
             if (this.submitKey != null) {
                 consensusTransaction.sign(this.submitKey);
             }
@@ -135,6 +135,12 @@ private void handleHederaMessage(Object response) {/* Do nothing */}
 
     @Override
     public void stop() {
+        try {
+            this.hapiClient.close();
+        } catch (InterruptedException | TimeoutException e) {
+            e.printStackTrace(this.printStream);
+        }
+
         this.stopped = true;
         this.done.countDown();
     }
