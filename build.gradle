@@ -7,7 +7,7 @@ apply from: LOGSTASH_CORE_PATH + "/../rubyUtils.gradle"
 // ===========================================================================
 // plugin info
 // ===========================================================================
-group                      'com.hedera' // must match the package of the main plugin class
+group                      'com.hedera.hashgraph.logstash' // must match the package of the main plugin class
 version                    "${file("VERSION").text.trim()}" // read from required VERSION file
 description                = "Logstash Output Hedera: Output to Hedera Consensus Service"
 pluginInfo.licenses        = ['Apache-2.0'] // list of SPDX license IDs
