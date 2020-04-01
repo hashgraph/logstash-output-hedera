@@ -4,7 +4,6 @@
 
 ___
 ## ⚠️ Disclaimer
-___
 
 This project is currently under active development. 
 
@@ -15,6 +14,8 @@ ____
 ___
 
 ##### Install from RubyGems!
+
+`gem install logstash-output-hedera -v 0.0.1`
 
 or
 

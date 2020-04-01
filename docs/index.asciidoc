@@ -1,7 +1,6 @@
-:plugin: example
+:plugin: Hedera
 :type: output
 :default_codec: plain
-// Update header with plugin name and default codec
 
 ///////////////////////////////////////////
 START - GENERATED VARIABLES, DO NOT EDIT!
@@ -22,7 +21,7 @@ include::{include_path}/plugin_header.asciidoc[]
 
 ==== Description
 
-Add plugin description here
+Logstash Output Hedera: Output Events to the Hedera Consensus Service
 
 // Format anchors and links to support generated ids for versioning
 // Sample anchor: [id="plugins-{type}s-{plugin}-setting_name"]
@@ -34,92 +33,48 @@ Add plugin description here
 [cols="<,<,<",options="header",]
 |=======================================================================
 |Setting |Input type|Required
-| <<plugins-{type}s-{plugin}-a_setting_name>> |<<boolean,boolean>>|No
-| <<plugins-{type}s-{plugin}-another_setting_name>> |<<hash,hash>>|No
-| <<plugins-{type}s-{plugin}-setting_name_3>> |<<string,string>>|No
-| <<plugins-{type}s-{plugin}-setting_name_4>> |<<number,number>>|No
-| <<plugins-{type}s-{plugin}-setting_name_5>> |<<array,array>>|No
-| <<plugins-{type}s-{plugin}-setting_name_6>> |<<bytes,bytes>>|No
-| <<plugins-{type}s-{plugin}-setting_name_7>> |<<path,path>>|No
-| <<plugins-{type}s-{plugin}-setting_name_8>> |<<password,password>>|No
-| <<plugins-{type}s-{plugin}-setting_name_9>> |<<uri,uri>>|No
+| <<plugins-{type}s-{plugin}-topic_id>> |<<string,string>>|Yes
+| <<plugins-{type}s-{plugin}-operator_id>> |<<string,string>>|Yes
+| <<plugins-{type}s-{plugin}-operator_key>> |<<string,string>>|Yes
+| <<plugins-{type}s-{plugin}-network_name>> |<<string,string>>|Yes
+| <<plugins-{type}s-{plugin}-submit_key>> |<<string,string>>|No
 |=======================================================================
 
-[id="plugins-{type}s-{plugin}-a_setting_name"]
-===== `a_setting_name` 
-
-  * Value type is <<boolean,boolean>>
-  * Default value is `true`
-
-Add description here
-
-[id="plugins-{type}s-{plugin}-another_setting_name"]
-===== `another_setting_name` 
-
-  * Value type is <<hash,hash>>
-  * Default value is `{}`
-
-Add description here
-
-[id="plugins-{type}s-{plugin}-setting_name_3"]
-===== `setting_name_3` 
+[id="plugins-{type}s-{plugin}-topic_id"]
+===== `topic_id` 
 
   * Value type is <<string,string>>
-  * Default value is `{}`
 
-Add description here
+Submit events to this HCS topic, in the format "shard.realm.num", i.e "0.0.0"
 
-[id="plugins-{type}s-{plugin}-setting_name_4"]
-===== `setting_name_4` 
+[id="plugins-{type}s-{plugin}-operator_id"]
+===== `operator_id` 
 
-  * Value type is <<number,number>>
-  * Default value is `0`
+  * Value type is <<string,string>>
 
-Add description here
+The operator account id for your hedera client, in the format "shard.realm.num", i.e "0.0.0"
 
-[id="plugins-{type}s-{plugin}-setting_name_5"]
-===== `setting_name_5` 
+[id="plugins-{type}s-{plugin}-operator_key"]
+===== `operator_key` 
 
-  * Value type is <<array,array>>
-  * Default value is {}
+  * Value type is <<string,string>>
 
-Add description here
+Ed25519 private key associated with the operator account
 
-[id="plugins-{type}s-{plugin}-setting_name_6"]
-===== `setting_name_6` 
+[id="plugins-{type}s-{plugin}-network_name"]
+===== `network_name` 
 
-  * Value type is <<bytes,bytes>>
-  * Default value is {}
+  * Value type is <<string,string>>
 
-Add description here
+The name of the public hedera network, either "mainnet" or "testnet"
 
-[id="plugins-{type}s-{plugin}-setting_name_7"]
-===== `setting_name_7` 
+[id="plugins-{type}s-{plugin}-submit_key"]
+===== `submit_key` 
 
-  * Value type is <<path,path>>
-  * Default value is {}
+  * Value type is <<string,string>>
+  * Optional, Default value is null
 
-Add description here
-
-[id="plugins-{type}s-{plugin}-setting_name_8"]
-===== `setting_name_8` 
-
-  * Value type is <<password,password>>
-  * Default value is {}
-
-Add description here
-
-
-[id="plugins-{type}s-{plugin}-setting_name_9"]
-===== `setting_name_9` 
-
-  * Value type is <<uri,uri>>
-  * Default value is {}
-
-Add description here
-
-// The full list of Value Types is here: 
-// https://www.elastic.co/guide/en/logstash/current/configuration-file-structure.html
+Ed25519 private key used to create the topic on hcs, and with which all messages sent to the topic will be signed
 
 [id="plugins-{type}s-{plugin}-common-options"]
 include::{include_path}/{type}.asciidoc[]
