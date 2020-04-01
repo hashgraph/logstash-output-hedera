@@ -1,4 +1,4 @@
-package com.hedera;
+package com.hedera.hashgraph.logstash;
 
 import co.elastic.logstash.api.Configuration;
 import co.elastic.logstash.api.Event;
@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-public class LogstashOutputHederaTest {
+public class HederaTest {
 
     @Test
     public void testLogstashOutputHedera() {
@@ -37,6 +37,11 @@ public class LogstashOutputHederaTest {
          * Configuration for Hedera connection required, including:
          * OPERATOR_ID, OPERATOR_KEY, TOPIC_ID, NETWORK_NAME
          * You may specify MIRROR_NODE_ADDRESS, defaults to kabuto.sh if null
+         *
+         * "In a future phase of the Java plugin project, the 
+         * Logstash execution engine will validate that all required settings 
+         * are present and that no unsupported settings are present."
+         * Note: This means that this shorthand will need to be expanded later
          */
         for (DotenvEntry e : dotenv.entries()) {
             configValues.put(e.getKey().toLowerCase(), e.getValue());
@@ -44,7 +49,7 @@ public class LogstashOutputHederaTest {
 
         // Instantitate plugin
         Configuration config = new ConfigurationImpl(configValues);
-        LogstashOutputHedera logstashOutputHedera = new LogstashOutputHedera("test-id", config, null, System.err);
+        Hedera logstashOutputHedera = new Hedera("test-id", config, null, System.err);
 
         // Setup test
         int eventCount = 100;
@@ -75,7 +80,7 @@ public class LogstashOutputHederaTest {
             .setEndTime(endTime)
             .subscribe(mirrorClient, message -> {
                 try {
-                    Event e = EventEncoder.decode(message.message);
+                    Event e = Encoder.decode(message.message);
                     String m = (String) e.getField("message");
                     if (m.contains(uuid.toString())) {
                         receivedMessages.add(m);

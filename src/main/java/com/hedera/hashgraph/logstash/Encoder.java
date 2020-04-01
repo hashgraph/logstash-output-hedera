@@ -1,10 +1,10 @@
-package com.hedera;
+package com.hedera.hashgraph.logstash;
 
 import java.io.IOException;
 
 import co.elastic.logstash.api.Event;
 
-public class EventEncoder {
+public class Encoder {
     public static final byte[] encode(final Event event) throws IOException {
         return ((org.logstash.Event) event).serialize();
     }

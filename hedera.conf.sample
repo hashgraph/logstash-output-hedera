@@ -1,0 +1,18 @@
+/*
+ * How to use this file:
+ * 1) Fill in your information below
+ * 2) Delete this comment block
+ * 3) Rename this file to hedera.conf
+ * Note: Be careful not to check this file into git if it contains keys!
+ */
+input {
+  generator { message => "'Howdy!', from the Hedera Logstash Output Plugin!" count => 1 }
+}
+output {
+  java_output_example {
+    operator_id => "0.0.0",
+    operator_key => "302e...",
+    topic_id => "0.0.0",
+    network_name => "testnet"
+  }
+}

@@ -1,4 +1,4 @@
-package com.hedera;
+package com.hedera.hashgraph.logstash;
 
 import co.elastic.logstash.api.Configuration;
 import co.elastic.logstash.api.Context;
@@ -28,8 +28,8 @@ import com.hedera.hashgraph.sdk.consensus.ConsensusTopicId;
 import com.hedera.hashgraph.sdk.crypto.ed25519.Ed25519PrivateKey;
 
 // Class name must match plugin name (also in build.gradle)
-@LogstashPlugin(name = "logstash_output_hedera")
-public class LogstashOutputHedera implements Output {
+@LogstashPlugin(name = "hedera")
+public class Hedera implements Output {
     public static final PluginConfigSpec<String> OPERATOR_ID_CONFIG = PluginConfigSpec.stringSetting("operator_id");
     public static final PluginConfigSpec<String> OPERATOR_KEY_CONFIG = PluginConfigSpec.stringSetting("operator_key");
     public static final PluginConfigSpec<String> TOPIC_ID_CONFIG = PluginConfigSpec.stringSetting("topic_id");
@@ -52,7 +52,7 @@ public class LogstashOutputHedera implements Output {
 
     // All plugins must provide a constructor that accepts id, Configuration, and
     // Context
-    public LogstashOutputHedera(final String id, final Configuration configuration, final Context context) {
+    public Hedera(final String id, final Configuration configuration, final Context context) {
         this(id, configuration, context, System.out);
     }
 
@@ -76,7 +76,7 @@ public class LogstashOutputHedera implements Output {
         return this.networkName.contains("test") || this.networkName.contains("testnet");
     }
 
-    LogstashOutputHedera(final String id, final Configuration config, final Context context,
+    Hedera(final String id, final Configuration config, final Context context,
             OutputStream targetStream) {
         // Validate configuration settings here
         this.id = id;
@@ -110,7 +110,7 @@ public class LogstashOutputHedera implements Output {
             byte[] encodedEvent = null;
 
             try {
-                encodedEvent = EventEncoder.encode(event);
+                encodedEvent = Encoder.encode(event);
             } catch (IOException e) {
                 e.printStackTrace(this.printStream);
                 continue;
