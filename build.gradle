@@ -16,7 +16,7 @@ pluginInfo.authors         = ['Hedera']
 pluginInfo.email           = ['help@hedera.com']
 pluginInfo.homepage        = "https://github.com/hashgraph/logstash-output-hedera"
 pluginInfo.pluginType      = "output"
-pluginInfo.pluginClass     = "LogstashOutputHedera"
+pluginInfo.pluginClass     = "Hedera"
 pluginInfo.pluginName      = "hedera" // must match the @LogstashPlugin annotation in the main plugin class
 // ===========================================================================
 

@@ -1,4 +1,4 @@
-:plugin: Hedera
+:plugin: hedera
 :type: output
 :default_codec: plain
 
