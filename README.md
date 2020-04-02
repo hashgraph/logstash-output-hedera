@@ -38,7 +38,7 @@ cd ..
 
 // And you can use it locally
 ./gradlew gem
-logstash-plugin install --no-verify --local logstash-output-logstash_output_hedera-0.0.1.gem
+logstash-plugin install --no-verify --local logstash-output-hedera-0.0.1.gem
 
 // Configure and run the plugin
 // A sample configuration is available in hedera.conf.sample
