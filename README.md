@@ -2,6 +2,8 @@
 
 ### Logstash Java Output Plugin for HCS (Hedera Consensus Service)
 
+[![Gem Version](https://badge.fury.io/rb/logstash-output-hedera.svg)](https://badge.fury.io/rb/logstash-output-hedera)
+![](https://ruby-gem-downloads-badge.herokuapp.com/logstash-output-hedera/0.0.1)
 ___
 ## ⚠️ Disclaimer
 
