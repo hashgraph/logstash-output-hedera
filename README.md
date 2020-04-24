@@ -17,7 +17,7 @@ ___
 
 ##### Install from RubyGems!
 
-`gem install logstash-output-hedera -v 0.0.1`
+`gem install logstash-output-hedera`
 
 or
 
