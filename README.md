@@ -29,11 +29,13 @@ git clone --recurse-submodules git@github.com:hashgraph/logstash-output-hedera.g
 
 // Now build local logstash
 cd logstash-output-hedera/logstash
+git checkout v7.6.2
 ./gradlew assemble
 
 // Set up your environment for testing, refer to env.sample
 // Then you can build this project
 cd ..
+echo 'LOGSTASH_CORE_PATH=logstash/logstash-core' > gradle.properties
 ./gradlew build
 
 // And you can use it locally
